@@ -25,9 +25,9 @@ import {
         transform: '{{end_pos}}',
         zIndex: '{{z_index}}'
       }), {params: {end_pos: 'scale(1) translate(260px)', z_index: 'auto'}}),
-      transition('* => mid', [animate(1000)]),
-      transition('mid => end', [animate(1000)]),
-      transition('mid => start', [animate(1000)])
+      transition('* => mid', [animate('{{ anim_speed }}')], {params: {anim_speed: 1000}}),
+      transition('mid => end', [animate('{{ anim_speed }}')], {params: {anim_speed: 1000}}),
+      transition('mid => start', [animate('{{ anim_speed }}')], {params: {anim_speed: 1000}})
     ])
   ]
 })
@@ -37,6 +37,7 @@ export class HomeComponent implements OnInit {
   @Input() midPos: string;
   @Input() endPos: string;
   @Input() zindex: string;
+  @Input() animSpeed: number;
 
   isStart1 = 'start';
   isStart2 = 'start';
@@ -44,7 +45,6 @@ export class HomeComponent implements OnInit {
   isStart4 = 'start';
   isStart5 = 'start';
 
-  animSpeed = 800;
   intervalSpeed = this.animSpeed + 100;
   nbMaxSwaps = 5;
 
@@ -53,6 +53,7 @@ export class HomeComponent implements OnInit {
   cupsWidth = 130;
   nbCups = 5;
   nbSwaps = 0;
+  cups = document.getElementsByClassName('main');
 
   constructor() { }
 
@@ -70,13 +71,56 @@ export class HomeComponent implements OnInit {
     }, this.animSpeed);
     this.animSpeed -= 20;
   }
+  
 
   move(isSTart, dir, depth, nbMoves) {
     const distanceAnim = this.cupsWidth * nbMoves / 2;
-    const zindex = (depth > 0) ? 5 : -5;
+    this.zindex = (isSTart === 'start') ? '5' : '-5';
     const scale = (depth > 0) ? 1.25 : .75;
     dir = (dir === 'left') ? '-' : '+';
+    this.midPos = 'scale(' + scale + ') translate(' + dir + distanceAnim + 'px)';
   }
+
+  moveToLeft(isSTart, depth, nbMoves) {
+    this.move(isSTart, 'left', depth, nbMoves);
+  }
+
+  moveToRight(isSTart, depth, nbMoves) {
+    this.move(isSTart, 'right', depth, nbMoves);
+  }
+
+  swapElems(firstCup, secondCup) {
+    const posFirstCup = firstCup.data('posCurrent');
+    const posSecondCup = secondCup.data('posCurrent');
+    const nbMoves = Math.abs(posFirstCup - posSecondCup);
+    if (posFirstCup > posSecondCup) {
+      this.moveToLeft(firstCup, 1, nbMoves);
+      this.moveToRight(secondCup, 0, nbMoves);
+    } else {
+      this.moveToRight(firstCup, 0, nbMoves);
+      this.moveToLeft(secondCup, 1, nbMoves);
+    }
+    firstCup.data('posCurrent', posSecondCup);
+    secondCup.data('posCurrent', posFirstCup);
+  }
+
+  animateCups(){
+    const posCups = [];
+    const indexFirstCup = Math.floor(Math.random() * this.nbCups);
+    let indexSecondCup;
+    let firstCup;
+    let secondCup;
+    for (let i = 0; i < this.nbCups; i++) {
+      posCups[i] = i;
+    }
+    posCups.splice(indexFirstCup, 1);
+    indexSecondCup = posCups[Math.floor(Math.random() * (this.nbCups - 1))];
+    firstCup = this.cups[indexFirstCup];
+    secondCup = this.cups[indexSecondCup];
+    this.swapElems(firstCup, secondCup);
+  }
+
+
 
   getRandId() {
     const arr = [];
