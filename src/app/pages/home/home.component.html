@@ -1,31 +1,44 @@
 <div class="container">
   <div class="row">
-    <div #cup1 id="cup1" [@rotateCup]="{value: isStart1, params: {start_pos: startPos, mid_pos: midPos, end_pos: endPos, z_index: zindex, anim_speed: animSpeed}}" (click)="rotateCup(cup1)" class="main">
+    <img class="table" src="../../../assets/images/table.png">
+    <div #cup1 id="cup1" [@rotateCup]="{value: isStart1, params: {start_pos_1: startPos1, start_pos_2: startPos2, mid_pos_1: midPos1, mid_pos_2: midPos2, end_pos_1: endPos1, end_pos_2: endPos2, anim_speed: animSpeed}}" class="main">
       <div class="cup">
-        <img src="../../../assets/images/Cup-close.png">
+        <img (click)="openCup($event)" [src]="imgUrl">
       </div>
+      <div *ngIf="data === 1" #ball class="ball"></div>
     </div>
-    <div #cup2 id="cup2" [@rotateCup]="isStart2" (click)="rotateCup(cup2)" class="main">
+    <div #cup2 id="cup2" [@rotateCup]="{value: isStart2, params: {start_pos_1: startPos1, start_pos_2: startPos2, mid_pos_1: midPos1, mid_pos_2: midPos2, end_pos_1: endPos1, end_pos_2: endPos2, anim_speed: animSpeed}}" class="main">
       <div class="cup">
-        <img src="../../../assets/images/Cup-close.png">
+        <img (click)="openCup($event)" [src]="imgUrl">
       </div>
-      <div #ball class="ball"></div>
+      <div *ngIf="data === 2" #ball class="ball"></div>
     </div>
-    <div #cup3 id="cup3" [@rotateCup]="isStart3" (click)="rotateCup(cup3)" class="main">
+    <div #cup3 id="cup3" [@rotateCup]="{value: isStart3, params: {start_pos_1: startPos1, start_pos_2: startPos2, mid_pos_1: midPos1, mid_pos_2: midPos2, end_pos_1: endPos1, end_pos_2: endPos2, anim_speed: animSpeed}}" class="main">
       <div class="cup">
-        <img src="../../../assets/images/Cup-close.png">
+        <img (click)="openCup($event)" [src]="imgUrl">
       </div>
+      <div *ngIf="data === 3" #ball class="ball"></div>
     </div>
-    <div #cup4 id="cup4" [@rotateCup]="isStart4" (click)="rotateCup(cup4)" class="main">
+    <div #cup4 id="cup4" [@rotateCup]="{value: isStart4, params: {start_pos_1: startPos1, start_pos_2: startPos2, mid_pos_1: midPos1, mid_pos_2: midPos2, end_pos_1: endPos1, end_pos_2: endPos2, anim_speed: animSpeed}}" class="main">
       <div class="cup">
-        <img src="../../../assets/images/Cup-close.png">
+        <img (click)="openCup($event)" [src]="imgUrl">
       </div>
+      <div *ngIf="data === 4" #ball class="ball"></div>
     </div>
-    <div #cup5 id="cup5" [@rotateCup]="isStart5" (click)="rotateCup(cup5)" class="main">
+    <div #cup5 id="cup5" [@rotateCup]="{value: isStart5, params: {start_pos_1: startPos1, start_pos_2: startPos2, mid_pos_1: midPos1, mid_pos_2: midPos2, end_pos_1: endPos1, end_pos_2: endPos2, anim_speed: animSpeed}}" class="main">
       <div class="cup">
-        <img src="../../../assets/images/Cup-close.png">
+        <img (click)="openCup($event)" [src]="imgUrl">
       </div>
+      <div *ngIf="data === 5" #ball class="ball"></div>
     </div>
   </div>
 </div>
-<button (click)="play()">Play</button>
+<button (click)="play()" class="playBtn">Play</button>
+<div class="points">
+  <h3>{{points}}</h3>
+</div>
+<div *ngIf="gameOver" class="game-over">
+  <h2>GAME OVER</h2>
+  <h2>{{points}}</h2>
+  <button (click)="play()">Play Again</button>
+</div>
